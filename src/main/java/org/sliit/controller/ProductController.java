@@ -1,28 +1,47 @@
 package org.sliit.controller;
 
+import java.util.List;
+
+import org.sliit.model.Product;
+import org.sliit.productservice.ProductService;
 import org.springframework.web.bind.annotation.*;
+//import com.example.demo.model.Product;
+//import com.example.demo.service.ProductService;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/api/products")
 public class ProductController {
 
-    @GetMapping("All")
-    public String getAllProducts() {
-        return "All products";
+    private final ProductService productService;
+
+    public ProductController(ProductService productService) {
+        this.productService = productService;
     }
 
-    @GetMapping("ById")
-    public String getProductById() {
-        return "Product by ID";
+    @GetMapping
+    public List<Product> getAllProducts() {
+        return productService.getAllProducts();
     }
 
-    @PostMapping("Add")
-    public String addProduct() {
-        return "Add product";
+    @GetMapping("/{id}")
+    public Product getProductById(@PathVariable Long id) {
+        return productService.getProductById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
     }
 
-    @DeleteMapping("Delete")
-    public String deleteProduct() {
-        return "Delete product";
+    @PostMapping
+    public Product createProduct(@RequestBody Product product) {
+        return productService.saveProduct(product);
+    }
+
+    @PutMapping("/{id}")
+    public Product updateProduct(@PathVariable Long id,
+                                 @RequestBody Product product) {
+        return productService.updateProduct(id, product);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteProduct(@PathVariable Long id) {
+        productService.deleteProduct(id);
     }
 }

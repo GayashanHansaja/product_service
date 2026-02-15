@@ -1,4 +1,4 @@
-package org.sliit.productservice;
+package org.sliit;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
